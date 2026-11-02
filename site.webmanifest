@@ -1,0 +1,32 @@
+{
+ "name": "TSC — ছালাভরা তালতলা স্পোর্টিং ক্লাব",
+ "short_name": "TSC Club",
+ "description": "ক্লাবের লাইভ স্কোর, ফলাফল, পরিসংখ্যান ও গ্যালারি",
+ "start_url": "/?source=homescreen",
+ "scope": "/",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#022C22",
+ "theme_color": "#065F46",
+ "lang": "bn",
+ "icons": [
+  {
+   "src": "tsc-club-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "tsc-club-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "tsc-club-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
