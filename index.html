@@ -391,6 +391,27 @@ details ul{padding-left:20px}
 .ntc-it .mt{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px;font-size:12.5px;color:var(--dim)}
 .ntc-it .mt a{color:#fff;background:var(--g7);border-radius:10px;padding:6px 12px;font-weight:800}
 .ntc-empty{text-align:center;color:var(--dim);padding:40px 16px}
+/* commentary */
+.cm{max-width:860px;margin:26px auto 0;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 6px 22px rgba(6,78,59,.08);overflow:hidden}
+.cm[hidden]{display:none}
+.cm-h{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:linear-gradient(135deg,var(--g9),var(--g7));color:#fff}
+.cm-h b{font-size:16px}
+.cm-live{font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;background:#DC2626}
+.cm-live.done{background:rgba(255,255,255,.2)}
+.cm-tabs{display:flex;gap:6px;padding:10px 12px 0}
+.cm-tabs button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:700 12.5px inherit;font-family:inherit;cursor:pointer;color:var(--g9)}
+.cm-tabs button.on{background:var(--g7);border-color:var(--g7);color:#fff}
+.cm-list{padding:6px 12px 10px}
+.cm-it{display:flex;gap:12px;padding:11px 4px;border-bottom:1px solid #EEF3F0;align-items:flex-start}
+.cm-it:last-child{border-bottom:0}
+.cm-ov{font-weight:900;color:var(--dim);font-size:13px;min-width:34px;padding-top:4px;font-variant-numeric:tabular-nums}
+.cm-b{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;background:#EEF3F0;color:var(--g9)}
+.cm-b.r4{background:#1D4ED8;color:#fff}.cm-b.r6{background:#7C3AED;color:#fff}.cm-b.w{background:#DC2626;color:#fff}.cm-b.x{background:#FEF3C7;color:#92400E}
+.cm-tx{flex:1;font-size:14.5px;line-height:1.5;color:#1F2937}.cm-tx b{color:var(--g9)}
+.cm-it.big .cm-tx{font-weight:700}
+.cm-sum{background:#F4F8F6;border-radius:12px;padding:9px 12px;margin:8px 0;font-size:13px;color:var(--g9);font-weight:700;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cm-more{display:block;margin:0 auto 14px;border:0;background:#ECFDF5;color:var(--g7);font:800 13px inherit;font-family:inherit;border-radius:999px;padding:8px 18px;cursor:pointer}
+.cm-more[hidden]{display:none}
 footer{background:var(--g9);color:#A7F3D0;text-align:center;padding:30px 20px;font-size:14px}
 footer b{color:#fff}
 </style>
@@ -439,6 +460,12 @@ footer b{color:#fff}
       <div class="btns"><a class="btn green js-watch" href="https://nasimshah01.github.io/tsc/?watch" target="_blank" data-en="Open full screen ↗">ফুল স্ক্রিনে খুলুন ↗</a></div>
     </div>
     <div class="live-frame"><iframe id="liveFrame" title="Live score" loading="lazy"></iframe></div>
+  </div>
+  <div class="cm" id="cm" hidden>
+    <div class="cm-h"><b data-en="🎙️ Ball-by-ball commentary">🎙️ বল-বাই-বল ধারাভাষ্য</b><span class="cm-live" id="cmLive"></span></div>
+    <div class="cm-tabs" id="cmTabs"></div>
+    <div class="cm-list" id="cmList"></div>
+    <button class="cm-more" id="cmMore" hidden data-en="Show more">আরো দেখুন</button>
   </div>
 </div></section>
 <section class="alt" id="events" hidden><div class="wrap">
@@ -1070,6 +1097,62 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
   load().then(()=>{ if(location.hash==='#notice') open(false); });
   setInterval(()=>{ if(!document.hidden) load(); },120000);
   document.getElementById('langBtn').addEventListener('click',()=>setTimeout(()=>{ banner(); if(!ov.hidden) renderList(); },0));
+})();
+</script>
+<script>
+(function(){
+  const URL_C='https://tsc-cricket--live-default-rtdb.asia-southeast1.firebasedatabase.app/live/current.json';
+  const box=document.getElementById('cm'), list=document.getElementById('cmList'), tabsEl=document.getElementById('cmTabs'), liveEl=document.getElementById('cmLive'), more=document.getElementById('cmMore');
+  const L=()=>document.documentElement.lang==='en'?'en':'bn', T=(bn,en)=>L()==='en'?en:bn;
+  const num=n=>L()==='en'?String(n):String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+  const esc=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let D=null, inn=null, shown=30, lastRev=null;
+  const pick=(arr,i)=>arr[Math.abs(i)%arr.length];
+  function nm(id){ const p=(D.players||[]).find(x=>x.id===id); return p?p.name:'—'; }
+  function team(side){ const m=D.match; const t=side==='A'?m.teamA:m.teamB; return (t&&t.name)||''; }
+  function outType(w){ const t=(w&&w.type)||''; const bn={bowled:'বোল্ড',caught:'ক্যাচ আউট',lbw:'এলবিডব্লিউ',runout:'রান আউট',stumped:'স্টাম্পড',hitwicket:'হিট উইকেট',retired:'রিটায়ার্ড'}, en={bowled:'bowled',caught:'caught',lbw:'lbw',runout:'run out',stumped:'stumped',hitwicket:'hit wicket',retired:'retired'}; return (L()==='en'?en:bn)[t]||t; }
+  function line(ev,i){
+    const bat='<b>'+esc(nm(ev.strikerId))+'</b>', bow=esc(nm(ev.bowlerId)), r=ev.runs||0, x=ev.extraRuns||0;
+    if(ev.wicket){ const out='<b>'+esc(nm(ev.dismissedId||ev.strikerId))+'</b>';
+      return T(pick([`আউট! ${out} ${outType(ev.wicket)} — ${bow}-এর দারুণ সাফল্য 🎯`,`উইকেট! ${bow} ফেরালেন ${out}-কে, ${outType(ev.wicket)} 🎯`],i), `OUT! ${out} ${outType(ev.wicket)} — big moment for ${bow} 🎯`); }
+    if(ev.extraType==='wide') return T(`ওয়াইড বল, ${bow}-এর বল লাইনের বাইরে। অতিরিক্ত ${num(1+x)} রান।`,`Wide from ${bow}. ${1+x} extra.`);
+    if(ev.extraType==='noball') return T(`নো বল! ${r?`সাথে ${bat} নিলেন ${num(r)} রান।`:'অতিরিক্ত ১ রান।'}`,`No ball!${r?` ${bat} adds ${r}.`:' 1 extra.'}`);
+    if(ev.extraType==='bye') return T(`বাই, ${num(x)} রান যোগ হলো।`,`Byes, ${x} run${x>1?'s':''}.`);
+    if(ev.extraType==='legbye') return T(`লেগ বাই, ${num(x)} রান।`,`Leg bye, ${x} run${x>1?'s':''}.`);
+    if(r===6) return T(pick([`ছক্কা! ${bat} বল পাঠালেন সোজা মাঠের বাইরে 🚀`,`বিশাল ছক্কা! ${bow}-এর বলে ${bat}-এর দুর্দান্ত শট 🚀`,`ছয়! দর্শকদের মাথার ওপর দিয়ে উড়ে গেল বল, ${bat} দারুণ ফর্মে 🔥`],i),`SIX! ${bat} launches ${bow} out of the ground 🚀`);
+    if(r===4) return T(pick([`চার! ${bat}-এর চমৎকার শট, বল সীমানা পেরিয়ে 🏏`,`দারুণ বাউন্ডারি! ${bow}-এর বলে ${bat} মারলেন চার`,`চার রান! ফিল্ডারদের ফাঁক গলে বল সোজা সীমানায়, ${bat} 👏`],i),`FOUR! ${bat} finds the boundary off ${bow} 🏏`);
+    if(r===0) return T(pick([`${bow} থেকে ${bat}, কোনো রান নেই।`,`ডট বল! ${bow}-এর আঁটসাঁট বল।`,`${bat} ঠেকিয়ে দিলেন, রান নেই।`],i),`${bow} to ${bat}, no run.`);
+    if(r===1) return T(pick([`${bat} এক রান নিলেন।`,`সিঙ্গেল, স্ট্রাইক বদল।`,`${bow} থেকে ${bat}, এক রান।`],i),`${bat} takes a single.`);
+    if(r===2) return T(`দুই রান! দৌড়ে নিলেন ${bat}।`,`Two runs, good running by ${bat}.`);
+    if(r===3) return T(`তিন রান! ${bat}-এর জোরালো দৌড়।`,`Three runs for ${bat}.`);
+    return T(`${bat} নিলেন ${num(r)} রান।`,`${bat} gets ${r}.`);
+  }
+  function badge(ev){ if(ev.wicket) return ['w','W']; if(ev.extraType==='wide') return ['x',T('ও','wd')]; if(ev.extraType==='noball') return ['x',T('নো','nb')]; if(ev.extraType==='bye'||ev.extraType==='legbye') return ['x',num(ev.extraRuns||0)+(ev.extraType==='bye'?T('বা','b'):T('লে','lb'))]; const r=ev.runs||0; return [r===4?'r4':r===6?'r6':'',num(r)]; }
+  function render(){
+    const m=D&&D.match; if(!m||!(m.innings||[]).some(i=>(i.timeline||[]).length)){ box.hidden=true; return; }
+    box.hidden=false;
+    const done=m.status==='completed'||m.status==='abandoned'; liveEl.textContent=done?T('ম্যাচ শেষ','Finished'):(D.state==='paused'?T('বিরতি','Paused'):'● LIVE'); liveEl.className='cm-live'+(done?' done':'');
+    const inns=(m.innings||[]).map((x,i)=>[x,i]).filter(([x])=>(x.timeline||[]).length);
+    if(inn===null||!inns.some(([,i])=>i===inn)) inn=inns[inns.length-1][1];
+    tabsEl.innerHTML=inns.length>1?inns.map(([x,i])=>`<button class="${i===inn?'on':''}" data-cm-inn="${i}">${esc(team(x.battingTeam))}</button>`).join(''):'';
+    const I=m.innings[inn], bpo=m.ballsPerOver||6, tl=I.timeline||[];
+    const rows=[]; let runs=0,wk=0,overRuns=0;
+    tl.forEach((ev,i)=>{
+      const legal=ev.isLegal!==false, b=ev.ballsAfter||0;
+      const ov = legal ? `${Math.floor((b-1)/bpo)}.${((b-1)%bpo)+1}` : `${Math.floor(b/bpo)}.${(b%bpo)+1}`;
+      const add=(ev.runs||0)+(ev.extraRuns||0)+((ev.extraType==='wide'||ev.extraType==='noball')?1:0)-((ev.extraType==='bye'||ev.extraType==='legbye')?(ev.runs||0):0);
+      runs+=add; overRuns+=add; if(ev.wicket) wk++;
+      const [cls,lab]=badge(ev);
+      rows.push(`<div class="cm-it ${ev.wicket||ev.runs>=4?'big':''}"><span class="cm-ov">${num(ov)}</span><span class="cm-b ${cls}">${lab}</span><div class="cm-tx">${line(ev,i)}</div></div>`);
+      if(legal && b>0 && b%bpo===0){ rows.push(`<div class="cm-sum"><span>${T(`${num(b/bpo)} ওভার শেষ`,`End of over ${b/bpo}`)}</span><span>${esc(team(I.battingTeam))} ${num(runs)}/${num(wk)}</span><span>${T(`এই ওভারে ${num(overRuns)} রান`,`${overRuns} runs this over`)}</span></div>`); overRuns=0; }
+    });
+    const all=rows.reverse(); list.innerHTML=all.slice(0,shown).join(''); more.hidden=all.length<=shown;
+  }
+  async function load(){ try{ const r=await fetch(URL_C,{cache:'no-store'}); if(!r.ok) return; const d=await r.json(); if(!d||!d.match||d.state==='deleted'){ D=null; box.hidden=true; return; } if(d.rev===lastRev && D) return; lastRev=d.rev; D=d; render(); }catch(e){} }
+  tabsEl.addEventListener('click',e=>{ const b=e.target.closest('[data-cm-inn]'); if(!b) return; inn=+b.dataset.cmInn; shown=30; render(); });
+  more.addEventListener('click',()=>{ shown+=40; render(); });
+  load(); setInterval(()=>{ if(document.hidden) return; const live=D&&D.match&&D.match.status==='live'; const r=box.getBoundingClientRect(); const near=r.top<innerHeight*1.5&&r.bottom>-200; if(live&&near) load(); else if(Math.random()<0.15) load(); },20000);
+  document.getElementById('langBtn').addEventListener('click',()=>setTimeout(()=>{ if(D) render(); },0));
 })();
 </script>
 </body>
