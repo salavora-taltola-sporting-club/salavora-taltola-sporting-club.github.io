@@ -1499,5 +1499,19 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
   document.getElementById('langBtn').addEventListener('click',()=>setTimeout(()=>{ if(D) update(); },0));
 })();
 </script>
+<script>
+/* open a player's profile from a QR link: #p=Player-Name */
+(function(){
+  function go(){ const h=decodeURIComponent(location.hash||''); if(!h.startsWith('#p=')) return; const want=h.slice(3).toLowerCase().replace(/[\s_]+/g,'-');
+    const cards=[...document.querySelectorAll('.pl')]; const norm=t=>t.toLowerCase().trim().replace(/\s+/g,'-');
+    const find=()=>cards.find(c=>{ const n=c.querySelector('.nm,.name,b,h4'); const name=n?n.textContent:c.textContent; return norm(name).startsWith(want)||want.startsWith(norm(name)); });
+    let c=find();
+    if(!c){ const n=document.querySelectorAll('#teamTabs [data-team]').length; for(let k=0;k<n;k++){ const t=document.querySelectorAll('#teamTabs [data-team]')[k]; if(t) t.click(); c=[...document.querySelectorAll('.pl')].find(x=>{ const nm=norm((x.querySelector('.nm')||x).textContent); return nm.startsWith(want)||want.startsWith(nm); }); if(c) break; } }
+    const sec=document.getElementById('players'); if(sec) sec.scrollIntoView();
+    if(c) setTimeout(()=>c.click(),400);
+  }
+  window.addEventListener('hashchange',go); setTimeout(go,900);
+})();
+</script>
 </body>
 </html>
