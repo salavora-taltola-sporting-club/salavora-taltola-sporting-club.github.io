@@ -447,6 +447,51 @@ details ul{padding-left:20px}
 .aw-rest{border-top:1px solid #EEF3F0;padding:6px 14px 10px;font-size:13px}
 .aw-rest div{display:flex;justify-content:space-between;padding:4px 0;color:#374151}
 .aw-empty{text-align:center;color:var(--dim);padding:40px 16px}
+/* live extras */
+.lx-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.lx-btns[hidden]{display:none}
+.lx-btns .btn{margin:0;border:0;cursor:pointer;font-family:inherit}
+.cm-snd{border:0;background:rgba(255,255,255,.18);color:#fff;width:34px;height:30px;border-radius:999px;font-size:15px;cursor:pointer}
+.cm-snd.on{background:#FBBF24}
+.cm-mode{display:flex;gap:6px;padding:10px 12px 0}
+.cm-mode button{flex:1;border:0;background:#EEF3F0;color:var(--g9);border-radius:12px;padding:8px;font:800 13px inherit;font-family:inherit;cursor:pointer}
+.cm-mode button.on{background:var(--g9);color:#fff}
+.cm-chase{margin:10px 12px 0;border-radius:14px;padding:10px 12px;background:#FFFBEB;border:1.5px solid #FBBF24;font-size:13.5px;line-height:1.5;color:#78350F;font-weight:700}
+.cm-chase[hidden]{display:none}
+.cm-chase b{color:#065F46}
+.cm-info{padding:10px 14px 14px}
+.cm-info[hidden]{display:none}
+.ci-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #EEF3F0;font-size:14px}
+.ci-row span{color:var(--dim)}.ci-row b{text-align:right}
+.ci-xi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.ci-xi div{background:#F4F8F6;border-radius:14px;padding:10px 12px}
+.ci-xi h5{margin:0 0 6px;font-size:13px;color:var(--g7)}
+.ci-xi ol{margin:0;padding-left:18px;font-size:13px;line-height:1.7}
+@media(max-width:520px){.ci-xi{grid-template-columns:1fr}}
+/* TV scoreboard */
+.tv{position:fixed;inset:0;z-index:99;background:radial-gradient(120% 90% at 50% 0%,#0C3A8C 0%,#061B44 60%,#020B1F 100%);color:#fff;display:flex;flex-direction:column;font-family:inherit}
+.tv[hidden]{display:none}
+.tv-top{display:flex;align-items:center;gap:14px;padding:2vh 3vw;font-weight:800;font-size:clamp(14px,2.4vw,28px)}
+.tv-top #tvTitle{flex:1;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tv-live{background:#DC2626;border-radius:999px;padding:.2em .8em;animation:tvp 1.4s infinite}
+.tv-live.done{background:#475569;animation:none}
+@keyframes tvp{50%{opacity:.6}}
+.tv-x{border:0;background:rgba(255,255,255,.12);color:#fff;width:2em;height:2em;border-radius:50%;font-size:inherit;cursor:pointer}
+.tv-main{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.6vmin;padding:0 4vw 4vh;text-align:center}
+.tv-team{font-size:clamp(18px,6vmin,60px);font-weight:900;color:#FFC90E;letter-spacing:.5px}
+.tv-score{font-size:clamp(56px,24vmin,260px);font-weight:900;line-height:.95;font-variant-numeric:tabular-nums}
+.tv-ov{font-size:clamp(15px,4.4vmin,48px);opacity:.9;font-weight:700}
+.tv-need{font-size:clamp(15px,5vmin,52px);font-weight:900;background:#FFC90E;color:#061B44;border-radius:18px;padding:.25em .8em}
+.tv-row{display:flex;flex-wrap:wrap;justify-content:center;gap:2vw;font-size:clamp(13px,3.4vmin,34px);font-weight:700}
+.tv-row span{background:rgba(255,255,255,.1);border-radius:14px;padding:.3em .7em}
+.tv-balls{display:flex;gap:1.2vw;justify-content:center}
+.tv-balls i{font-style:normal;width:clamp(28px,7vmin,70px);height:clamp(28px,7vmin,70px);border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:clamp(12px,3.2vmin,30px)}
+.tv-balls i.r4{background:#2563EB}.tv-balls i.r6{background:#7C3AED}.tv-balls i.w{background:#DC2626}.tv-balls i.x{background:#F59E0B;color:#061B44}
+.tv-chase{font-size:clamp(12px,3vmin,30px);color:#C7D7F5;font-weight:700;max-width:90vw}
+.ar-bv{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.ar-sel{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px;font:700 13.5px inherit;font-family:inherit;background:#fff;color:var(--g9)}
+.ar-t td:first-child small{display:block}
+@media(max-width:520px){.ar-bv{grid-template-columns:1fr}}
 footer{background:var(--g9);color:#A7F3D0;text-align:center;padding:30px 20px;font-size:14px}
 footer b{color:#fff}
 </style>
@@ -496,11 +541,15 @@ footer b{color:#fff}
     </div>
     <div class="live-frame"><iframe id="liveFrame" title="Live score" loading="lazy"></iframe></div>
   </div>
+  <div class="lx-btns" id="lxBtns" hidden><button class="btn gold" data-tv-open data-en="📺 Big-screen scoreboard">📺 বড় স্ক্রিনে দেখুন</button><button class="btn green" data-share-score data-en="📸 Share score image">📸 স্কোরের ছবি শেয়ার</button></div>
   <div class="cm" id="cm" hidden>
-    <div class="cm-h"><b data-en="🎙️ Ball-by-ball commentary">🎙️ বল-বাই-বল ধারাভাষ্য</b><span class="cm-live" id="cmLive"></span></div>
-    <div class="cm-tabs" id="cmTabs"></div>
+    <div class="cm-h"><b data-en="🎙️ Ball-by-ball commentary">🎙️ বল-বাই-বল ধারাভাষ্য</b><span style="display:flex;gap:8px;align-items:center"><button class="cm-snd" id="cmSnd" title="Sound">🔇</button><span class="cm-live" id="cmLive"></span></span></div>
+    <div class="cm-mode"><button class="on" data-cm-mode="c" data-en="🎙️ Commentary">🎙️ ধারাভাষ্য</button><button data-cm-mode="i" data-en="ℹ️ Match info">ℹ️ ম্যাচ ইনফো</button></div>
+    <div class="cm-chase" id="cmChase" hidden></div>
+    <div id="cmC"><div class="cm-tabs" id="cmTabs"></div>
     <div class="cm-list" id="cmList"></div>
-    <button class="cm-more" id="cmMore" hidden data-en="Show more">আরো দেখুন</button>
+    <button class="cm-more" id="cmMore" hidden data-en="Show more">আরো দেখুন</button></div>
+    <div class="cm-info" id="cmInfo" hidden></div>
   </div>
 </div></section>
 <section class="alt" id="events" hidden><div class="wrap">
@@ -618,6 +667,7 @@ footer b{color:#fff}
   <a href="#stats" class="bs-it"><b>📊</b><span data-en="Stats">পরিসংখ্যান</span></a>
   <a href="#awards" data-open-ar="aw" class="bs-it"><b>🏅</b><span data-en="Awards">পুরস্কার</span></a>
   <a href="#scorecards" data-open-ar="sc" class="bs-it"><b>📋</b><span data-en="Scorecards">স্কোরকার্ড</span></a>
+  <a href="#tv" data-tv-open class="bs-it"><b>📺</b><span data-en="Big screen">বড় স্ক্রিন</span></a>
   <a href="#gallery" data-open-gallery class="bs-it"><b>📸</b><span data-en="Gallery">গ্যালারি</span></a>
   <a href="#ground" class="bs-it"><b>📍</b><span data-en="Ground">মাঠ</span></a>
   <a href="#join" class="bs-it"><b>🤝</b><span data-en="Join">যোগ দিন</span></a>
@@ -627,6 +677,10 @@ footer b{color:#fff}
   <a href="#club" class="bs-it"><b>🏏</b><span data-en="Club">ক্লাব</span></a>
   <a href="#contact" class="bs-it"><b>✉️</b><span data-en="Contact">যোগাযোগ</span></a>
 </div></div>
+<div class="tv" id="tv" hidden>
+  <div class="tv-top"><span class="tv-live" id="tvLive">● LIVE</span><span id="tvTitle"></span><button class="tv-x" data-tv-x aria-label="close">×</button></div>
+  <div class="tv-main" id="tvMain"></div>
+</div>
 <div class="mdv" id="arOv" hidden>
   <div class="gal-head"><div><b id="arTitle">📋</b><small id="arSub"></small></div><button class="gal-x" data-ar-x aria-label="close">×</button></div>
   <div class="gal-years" id="arTabs"></div>
@@ -1191,7 +1245,9 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
     });
     const all=rows.reverse(); list.innerHTML=all.slice(0,shown).join(''); more.hidden=all.length<=shown;
   }
-  async function load(){ try{ const r=await fetch(URL_C,{cache:'no-store'}); if(!r.ok) return; const d=await r.json(); if(!d||!d.match||d.state==='deleted'){ D=null; box.hidden=true; return; } if(d.rev===lastRev && D) return; lastRev=d.rev; D=d; render(); }catch(e){} }
+  const emit=()=>{ window.__cmD=D; document.dispatchEvent(new CustomEvent('cm:data')); };
+  async function load(){ try{ const r=await fetch(URL_C,{cache:'no-store'}); if(!r.ok) return; const d=await r.json(); if(!d||!d.match||d.state==='deleted'){ D=null; box.hidden=true; emit(); return; } if(d.rev===lastRev && D) return; lastRev=d.rev; D=d; render(); emit(); }catch(e){} }
+  window.__cmLoad=load;
   tabsEl.addEventListener('click',e=>{ const b=e.target.closest('[data-cm-inn]'); if(!b) return; inn=+b.dataset.cmInn; shown=30; render(); });
   more.addEventListener('click',()=>{ shown+=40; render(); });
   load(); setInterval(()=>{ if(document.hidden) return; const live=D&&D.match&&D.match.status==='live'; const r=box.getBoundingClientRect(); const near=r.top<innerHeight*1.5&&r.bottom>-200; if(live&&near) load(); else if(Math.random()<0.15) load(); },20000);
@@ -1216,7 +1272,7 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
   function scoreOf(m,team){ const i=(m.inns||[]).find(x=>x.bt===team); return i?`${num(i.r)}/${num(i.w)} (${num(ov_(i.bl,m.bpo))})`:'—'; }
   function tabs(){
     const ys=years();
-    let h=`<button class="${mode==='sc'?'on':''}" data-ar-mode="sc">${T('📋 স্কোরকার্ড','📋 Scorecards')}</button><button class="${mode==='aw'?'on':''}" data-ar-mode="aw">${T('🏅 সেরা পুরস্কার','🏅 Awards')}</button>`;
+    let h=`<button class="${mode==='sc'?'on':''}" data-ar-mode="sc">${T('📋 স্কোরকার্ড','📋 Scorecards')}</button><button class="${mode==='aw'?'on':''}" data-ar-mode="aw">${T('🏅 সেরা পুরস্কার','🏅 Awards')}</button><button class="${mode==='bv'?'on':''}" data-ar-mode="bv">${T('⚔️ ব্যাটার বনাম বোলার','⚔️ Batter vs bowler')}</button><button class="${mode==='vn'?'on':''}" data-ar-mode="vn">${T('🏟️ মাঠ','🏟️ Grounds')}</button>`;
     if(ys.length) h+=`<span style="width:100%"></span>`+[['',T('সব সময়','All time')]].concat(ys.map(y=>[y,num(y)])).map(([k,l])=>`<button class="${year===k?'on':''}" data-ar-year="${k}">${l}</button>`).join('');
     tabsEl.innerHTML=h;
   }
@@ -1267,12 +1323,46 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
       ${box('linear-gradient(135deg,#DC2626,#991B1B)','🎯',T('সেরা বোলিং','Best bowling'),by(p=>p.bw>0,(a,b)=>b.bw-a.bw||a.bwR-b.bwR),p=>num(p.bw)+'/'+num(p.bwR),p=>T('এক ম্যাচে','in a match'))}
     </div>`;
   }
+  let bvBat='', bvBowl='';
+  function bvData(){
+    const R={};
+    (M||[]).filter(inYear).forEach(m=>{ const N=m.nm||[]; (m.bb||[]).forEach(rows=>rows.forEach(x=>{ const bat=N[x[0]], bow=N[x[1]]; if(!bat||!bow) return; const k=bat+'||'+bow;
+      const o=R[k]||(R[k]={bat,bow,b:0,r:0,f:0,s:0,o:0}); if(x[4]!=='w') o.b++; o.r+=x[2]; if(!x[4]&&x[2]===4) o.f++; if(!x[4]&&x[2]===6) o.s++; if(x[5]&&x[6]===x[0]&&x[7]!=='runout') o.o++; })); });
+    return Object.values(R);
+  }
+  function bvHTML(){
+    const all=bvData(); if(!all.length) return `<div class="aw-empty">⚔️<br>${T('এখনো যথেষ্ট তথ্য নেই — পরের ম্যাচগুলো থেকে জমা হবে','Not enough data yet — it builds up from upcoming matches')}</div>`;
+    const bats=[...new Set(all.map(x=>x.bat))].sort(), bows=[...new Set(all.map(x=>x.bow))].sort();
+    const sel=(id,arr,v,ph)=>`<select class="ar-sel" id="${id}"><option value="">${ph}</option>${arr.map(n=>`<option ${n===v?'selected':''}>${esc(n)}</option>`).join('')}</select>`;
+    let rows=all, head;
+    if(bvBat) rows=all.filter(x=>x.bat===bvBat); if(bvBowl) rows=rows.filter(x=>x.bow===bvBowl);
+    rows=rows.slice().sort((a,b)=>b.o-a.o||b.b-a.b).slice(0,bvBat||bvBowl?60:15);
+    const first=bvBat&&!bvBowl?T('বোলার','Bowler'):bvBowl&&!bvBat?T('ব্যাটার','Batter'):T('ব্যাটার বনাম বোলার','Batter vs bowler');
+    const cell=x=> bvBat&&!bvBowl?esc(x.bow): bvBowl&&!bvBat?esc(x.bat): `${esc(x.bat)}<small>vs ${esc(x.bow)}</small>`;
+    return `<div class="ar-wrap"><div class="ar-bv">${sel('arBvBat',bats,bvBat,T('— ব্যাটার বাছুন —','— Pick batter —'))}${sel('arBvBowl',bows,bvBowl,T('— বোলার বাছুন —','— Pick bowler —'))}</div>
+      ${!bvBat&&!bvBowl?`<div class="ar-note" style="border:0;padding:4px 2px 10px">${T('সবচেয়ে জমজমাট লড়াই (বেশি আউট আর বেশি বল)','Biggest battles (most dismissals and balls)')}</div>`:''}
+      <div class="ar-card"><table class="ar-t"><tr><th>${first}</th><th>${T('বল','B')}</th><th>R</th><th>4s</th><th>6s</th><th>${T('আউট','Out')}</th><th>SR</th></tr>
+      ${rows.map(x=>`<tr><td><b>${cell(x)}</b></td><td>${num(x.b)}</td><td><b>${num(x.r)}</b></td><td>${num(x.f)}</td><td>${num(x.s)}</td><td>${x.o?`<b style="color:#DC2626">${num(x.o)}</b>`:num(0)}</td><td>${x.b?num((100*x.r/x.b).toFixed(1)):'—'}</td></tr>`).join('')}</table></div></div>`;
+  }
+  function vnHTML(){
+    const ms=(M||[]).filter(inYear).filter(m=>(m.inns||[]).length); if(!ms.length) return `<div class="aw-empty">🏟️<br>${T('এখনো কোনো ম্যাচ নেই','No matches yet')}</div>`;
+    const V={}; ms.forEach(m=>{ const k=m.v||T('মাঠের নাম দেওয়া নেই','Venue not set'); (V[k]||(V[k]=[])).push(m); });
+    return `<div class="ar-wrap" style="max-width:1100px"><div class="aw-grid">${Object.entries(V).sort((a,b)=>b[1].length-a[1].length).map(([v,arr])=>{
+      const firsts=arr.map(m=>m.inns[0]).filter(Boolean), avg=firsts.length?Math.round(firsts.reduce((s,i)=>s+i.r,0)/firsts.length):0;
+      const tots=[]; arr.forEach(m=>m.inns.forEach(i=>tots.push([i.r,i.w,i.bt,m.d])));
+      const hi=tots.slice().sort((a,b)=>b[0]-a[0])[0], lo=tots.slice().sort((a,b)=>a[0]-b[0])[0];
+      const two=arr.filter(m=>m.inns.length>1); const bf=two.filter(m=>m.inns[0].r>m.inns[1].r).length, ch=two.filter(m=>m.inns[1].r>m.inns[0].r).length;
+      const row=(k,val)=>`<div><span>${k}</span><b>${val}</b></div>`;
+      return `<div class="aw"><div class="aw-h" style="background:linear-gradient(135deg,#0E8A63,#064E3B)"><span>🏟️ ${esc(v)}</span><small>${num(arr.length)} ${T('ম্যাচ','matches')}</small></div>
+        <div class="aw-rest" style="border:0;padding:10px 14px 12px">${row(T('প্রথম ইনিংসের গড় স্কোর','Avg 1st-innings score'),num(avg))}${hi?row(T('সর্বোচ্চ','Highest'),`${num(hi[0])}/${num(hi[1])} · ${esc(hi[2])}`):''}${lo?row(T('সর্বনিম্ন','Lowest'),`${num(lo[0])}/${num(lo[1])} · ${esc(lo[2])}`):''}
+        ${two.length?row(T('আগে ব্যাট করে জয়','Won batting first'),`${num(bf)} (${num(Math.round(100*bf/two.length))}%)`)+row(T('তাড়া করে জয়','Won chasing'),`${num(ch)} (${num(Math.round(100*ch/two.length))}%)`):''}</div></div>`; }).join('')}</div></div>`;
+  }
   function render(){
-    title.textContent=mode==='aw'?T('🏅 সেরা পুরস্কার','🏅 Awards'):T('📋 সব ম্যাচের স্কোরকার্ড','📋 Match scorecards');
+    title.textContent=mode==='aw'?T('🏅 সেরা পুরস্কার','🏅 Awards'):mode==='bv'?T('⚔️ ব্যাটার বনাম বোলার','⚔️ Batter vs bowler'):mode==='vn'?T('🏟️ মাঠের পরিসংখ্যান','🏟️ Ground stats'):T('📋 সব ম্যাচের স্কোরকার্ড','📋 Match scorecards');
     sub.textContent=M?T(`${num((M||[]).filter(inYear).length)}টি ম্যাচ`,`${(M||[]).filter(inYear).length} matches`):'';
     tabs();
     if(!M){ body.innerHTML=`<div class="aw-empty">${T('লোড হচ্ছে…','Loading…')}</div>`; return; }
-    body.innerHTML = mode==='aw' ? `<div class="ar-wrap" style="max-width:1100px">${awards()}</div>` : (open1?detail():list());
+    body.innerHTML = mode==='aw' ? `<div class="ar-wrap" style="max-width:1100px">${awards()}</div>` : mode==='bv' ? bvHTML() : mode==='vn' ? vnHTML() : (open1?detail():list());
   }
   let loadP=null;
   function load(){ if(loadP) return loadP; loadP=(async()=>{ try{ const r=await fetch(URL_A,{cache:'no-store'}); const d=r.ok?await r.json():null; M=(d&&d.matches)||[]; if(year && !years().includes(year)) year=''; }catch(e){ if(!M) M=[]; } loadP=null; render(); })(); return loadP; }
@@ -1290,8 +1380,123 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
     if(e.target.closest('[data-ar-x]')) close();
   });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!ov.hidden) close(); });
+  document.addEventListener('change',e=>{ if(e.target.id==='arBvBat'){ bvBat=e.target.value; render(); } else if(e.target.id==='arBvBowl'){ bvBowl=e.target.value; render(); } });
   window.addEventListener('popstate',()=>{ if(location.hash!=='#records'&&!ov.hidden) close(true); });
   document.getElementById('langBtn').addEventListener('click',()=>setTimeout(()=>{ if(!ov.hidden) render(); },0));
+})();
+</script>
+<script>
+(function(){
+  const L=()=>document.documentElement.lang==='en'?'en':'bn', T=(bn,en)=>L()==='en'?en:bn;
+  const num=n=>L()==='en'?String(n):String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+  const esc=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const MB=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'], ME=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fd=d=>{ if(!d) return ''; const [y,m,dd]=String(d).slice(0,10).split('-').map(Number); if(!m) return ''; return L()==='en'?`${dd} ${ME[m-1]} ${y}`:`${num(dd)} ${MB[m-1]} ${num(y)}`; };
+  const $=id=>document.getElementById(id);
+  const btns=$('lxBtns'), chase=$('cmChase'), info=$('cmInfo'), cC=$('cmC'), snd=$('cmSnd'), tv=$('tv'), tvMain=$('tvMain');
+  let D=null, sound=false, lastSpoken={}, wakeLock=null, mode='c';
+  const nm=id=>{ const p=((D&&D.players)||[]).find(x=>x.id===id); return p?p.name:''; };
+  const tname=side=>{ const m=D.match; const t=side==='A'?m.teamA:m.teamB; return (t&&t.name)||''; };
+  const ovs=(b,bpo)=>Math.floor(b/bpo)+(b%bpo?'.'+(b%bpo):'');
+  function cur(){ const m=D.match; const i=m.currentInnings||0; return [m.innings[i]||m.innings[m.innings.length-1], i]; }
+  function scoreUpTo(inn,balls){ let r=0,w=0,reached=false; for(const ev of (inn.timeline||[])){ const legal=ev.isLegal!==false, b=ev.ballsAfter||0; if(reached) break; if(legal && b>balls) break;
+      r+=(ev.runs||0)+(ev.extraRuns||0)+((ev.extraType==='wide'||ev.extraType==='noball')?1:0)-((ev.extraType==='bye'||ev.extraType==='legbye')?(ev.runs||0):0); if(ev.wicket) w++; if(legal && b===balls) reached=true; }
+    return [r,w]; }
+  function chaseHTML(){
+    const m=D.match; if(!m || (m.currentInnings||0)<1 || !m.innings[0] || !m.innings[1]) return '';
+    const i1=m.innings[0], i2=m.innings[1], bpo=m.ballsPerOver||6, b=i2.balls||0; if(!b) return '';
+    const [r1,w1]=scoreUpTo(i1,b), r2=i2.runs||0, w2=i2.wickets||0, diff=r2-r1;
+    const t1=tname(i1.battingTeam), t2=tname(i2.battingTeam);
+    const rel = diff>0?T(`<b>${num(diff)} রান এগিয়ে</b> 🔼`,`<b>${diff} runs ahead</b> 🔼`): diff<0?T(`<b>${num(-diff)} রান পিছিয়ে</b> 🔽`,`<b>${-diff} runs behind</b> 🔽`):T('<b>একদম সমান</b>','<b>level</b>');
+    return T(`📊 একই সময়ে (${num(ovs(b,bpo))} ওভার) ${esc(t1)} ছিল ${num(r1)}/${num(w1)} · এখন ${esc(t2)} ${num(r2)}/${num(w2)} — ${rel}`,`📊 At the same stage (${ovs(b,bpo)} ov) ${esc(t1)} were ${r1}/${w1} · ${esc(t2)} are ${r2}/${w2} — ${rel}`);
+  }
+  function infoHTML(){
+    const m=D.match; const toss=m.tossWinner?T(`${esc(tname(m.tossWinner))} টস জিতে ${m.tossChoice==='bowl'?'বোলিং':'ব্যাটিং'} নিয়েছে`,`${esc(tname(m.tossWinner))} won the toss and chose to ${m.tossChoice==='bowl'?'bowl':'bat'}`):'—';
+    const row=(k,v)=>v?`<div class="ci-row"><span>${k}</span><b>${v}</b></div>`:'';
+    const xi=side=>((side==='A'?m.squadA:m.squadB)||[]).map(p=>typeof p==='string'?nm(p):(p&&p.name)||'').filter(Boolean);
+    const xa=xi('A'), xb=xi('B');
+    return row(T('ম্যাচ','Match'),esc(tname('A')+' vs '+tname('B')))+row(T('তারিখ','Date'),fd(m.date))+row(T('মাঠ','Venue'),esc(m.venue||''))+row(T('টস','Toss'),toss)+row(T('ওভার','Overs'),num(m.overs||''))+row(T('আম্পায়ার','Umpire'),esc(m.umpire||''))+row(T('স্কোরার','Scorer'),esc(m.scorer||''))+
+      ((xa.length||xb.length)?`<div class="ci-xi"><div><h5>${esc(tname('A'))} · ${T('একাদশ','XI')}</h5><ol>${xa.map(n=>`<li>${esc(n)}</li>`).join('')}</ol></div><div><h5>${esc(tname('B'))} · ${T('একাদশ','XI')}</h5><ol>${xb.map(n=>`<li>${esc(n)}</li>`).join('')}</ol></div></div>`:'');
+  }
+  function tvHTML(){
+    const m=D.match, [inn,i]=cur(), bpo=m.ballsPerOver||6, done=m.status==='completed'||m.status==='abandoned';
+    $('tvLive').textContent=done?T('ম্যাচ শেষ','FINISHED'):(D.state==='paused'?T('বিরতি','PAUSED'):'● LIVE'); $('tvLive').className='tv-live'+(done?' done':'');
+    $('tvTitle').textContent=tname('A')+' vs '+tname('B')+(m.venue?' · '+m.venue:'');
+    const crr=inn.balls?(6*inn.runs/inn.balls).toFixed(2):'0.00';
+    let need='';
+    if(done && m.result && m.result.text) need=`<div class="tv-need">🏆 ${esc(m.result.text)}</div>`;
+    else if(i>=1 && m.innings[0]){ const tgt=(m.innings[0].runs||0)+1, left=(m.overs||20)*bpo-(inn.balls||0), rn=tgt-(inn.runs||0); if(rn>0) need=`<div class="tv-need">${T(`জিততে ${num(left)} বলে ${num(rn)} রান`,`Need ${rn} off ${left}`)}</div>`; }
+    const b=(id,isS)=>{ const x=(inn.batters||{})[id]; return x?`<span>${isS?'🏏 ':''}${esc(nm(id))} ${num(x.runs)} (${num(x.balls)})</span>`:''; };
+    const bw=(inn.bowlers||{})[inn.bowlerId];
+    const last=(inn.timeline||[]).slice(-6).map(ev=>{ if(ev.wicket) return '<i class="w">W</i>'; if(ev.extraType==='wide') return `<i class="x">${T('ও','wd')}</i>`; if(ev.extraType==='noball') return `<i class="x">${T('নো','nb')}</i>`; if(ev.extraType) return `<i class="x">${num(ev.extraRuns||0)}</i>`; const r=ev.runs||0; return `<i class="${r===4?'r4':r===6?'r6':''}">${num(r)}</i>`; }).join('');
+    const ch=chaseHTML();
+    return `<div class="tv-team">${esc(tname(inn.battingTeam))}</div>
+      <div class="tv-score">${num(inn.runs||0)}/${num(inn.wickets||0)}</div>
+      <div class="tv-ov">${T('ওভার','Overs')} ${num(ovs(inn.balls||0,bpo))}${m.overs?' / '+num(m.overs):''} · CRR ${num(crr)}</div>
+      ${need}
+      <div class="tv-row">${b(inn.strikerId,true)}${b(inn.nonStrikerId,false)}${bw?`<span>🎯 ${esc(nm(inn.bowlerId))} ${num(bw.wickets)}-${num(bw.runs)} (${num(ovs(bw.balls,bpo))})</span>`:''}</div>
+      ${last?`<div class="tv-balls">${last}</div>`:''}
+      ${ch?`<div class="tv-chase">${ch.replace(/<\/?b>/g,'')}</div>`:''}`;
+  }
+  function speak(t){ try{ if(!('speechSynthesis' in window)) return; const vs=speechSynthesis.getVoices()||[]; const bn=vs.find(v=>/^bn/i.test(v.lang)); const en=vs.find(v=>/^en/i.test(v.lang)); const useBn=L()==='bn' && (bn||!vs.length);
+      const u=new SpeechSynthesisUtterance(useBn?t.bn:t.en); const v=useBn?bn:en; if(v) u.voice=v; u.lang=v?v.lang:(useBn?'bn-BD':'en-US'); u.rate=.95; speechSynthesis.speak(u); }catch(e){} }
+  function announce(){
+    if(!sound||!D||!D.match) return; const [inn,i]=cur(); const tl=inn.timeline||[]; const key=D.match.id+'|'+i;
+    if(lastSpoken[key]===undefined){ lastSpoken[key]=tl.length; return; }
+    const fresh=tl.slice(lastSpoken[key]); lastSpoken[key]=tl.length;
+    const notable=fresh.filter(ev=>ev.wicket||(!ev.extraType&&(ev.runs===4||ev.runs===6))).slice(-2);
+    notable.forEach(ev=>{ if(ev.wicket){ const n=nm(ev.dismissedId||ev.strikerId); speak({bn:`আউট! ${n}`, en:`Out! ${n}`}); } else if(ev.runs===6) speak({bn:'ছক্কা!',en:'Six!'}); else speak({bn:'চার!',en:'Four!'}); });
+    const bpo=D.match.ballsPerOver||6; if(fresh.some(ev=>ev.isLegal!==false && (ev.ballsAfter||0)>0 && ev.ballsAfter%bpo===0)) speak({bn:`ওভার শেষ। ${tname(inn.battingTeam)} ${num(inn.runs)} রানে ${num(inn.wickets)} উইকেট`, en:`End of over. ${tname(inn.battingTeam)} ${inn.runs} for ${inn.wickets}`});
+  }
+  function update(){
+    D=window.__cmD||null; const has=!!(D&&D.match&&(D.match.innings||[]).some(x=>(x.timeline||[]).length));
+    btns.hidden=!has;
+    if(!has){ chase.hidden=true; if(!tv.hidden) tvMain.innerHTML=`<div class="tv-ov">${T('এখন কোনো ম্যাচ লাইভ নেই','No match is live right now')}</div>`; return; }
+    const ch=chaseHTML(); chase.innerHTML=ch; chase.hidden=!ch||mode!=='c';
+    if(mode==='i') info.innerHTML=infoHTML();
+    if(!tv.hidden) tvMain.innerHTML=tvHTML();
+    announce();
+  }
+  document.addEventListener('cm:data',update);
+  document.addEventListener('click',async e=>{
+    let t;
+    if((t=e.target.closest('[data-cm-mode]'))){ mode=t.dataset.cmMode; document.querySelectorAll('[data-cm-mode]').forEach(b=>b.classList.toggle('on',b===t)); cC.hidden=mode!=='c'; info.hidden=mode!=='i'; if(D) update(); return; }
+    if(e.target.closest('#cmSnd')){ sound=!sound; snd.textContent=sound?'🔊':'🔇'; snd.classList.toggle('on',sound); if(sound){ lastSpoken={}; announce(); speak({bn:'ধারাভাষ্য চালু',en:'Commentary sound on'}); } else { try{ speechSynthesis.cancel(); }catch(_){} } return; }
+    if(e.target.closest('[data-tv-open]')){ openTV(); return; }
+    if(e.target.closest('[data-tv-x]')){ closeTV(); return; }
+    if(e.target.closest('[data-share-score]')){ shareImg(); return; }
+  });
+  async function openTV(){ tv.hidden=false; document.body.style.overflow='hidden'; tvMain.innerHTML=D?tvHTML():`<div class="tv-ov">${T('লোড হচ্ছে…','Loading…')}</div>`; try{ if(tv.requestFullscreen) await tv.requestFullscreen(); }catch(e){} try{ if(navigator.wakeLock) wakeLock=await navigator.wakeLock.request('screen'); }catch(e){} if(window.__cmLoad) window.__cmLoad(); if(location.hash!=='#tv'){ try{ history.pushState({tv:1},'','#tv'); }catch(e){} } }
+  function closeTV(fromPop){ tv.hidden=true; document.body.style.overflow=''; try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){} try{ wakeLock&&wakeLock.release(); }catch(e){} wakeLock=null; if(!fromPop && location.hash==='#tv'){ try{ history.back(); }catch(e){} } }
+  window.addEventListener('popstate',()=>{ if(location.hash!=='#tv'&&!tv.hidden) closeTV(true); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!tv.hidden) closeTV(); });
+  if(location.hash==='#tv') setTimeout(openTV,300);
+  setInterval(()=>{ if(document.hidden) return; if((sound||!tv.hidden) && window.__cmLoad) window.__cmLoad(); },6000);
+  async function shareImg(){
+    if(!D||!D.match) return; const m=D.match, [inn,i]=cur(), bpo=m.ballsPerOver||6, done=m.status==='completed'||m.status==='abandoned';
+    const c=document.createElement('canvas'); c.width=1080; c.height=1080; const g=c.getContext('2d');
+    const gr=g.createLinearGradient(0,0,1080,1080); gr.addColorStop(0,'#0E8A63'); gr.addColorStop(.55,'#065F46'); gr.addColorStop(1,'#022C22'); g.fillStyle=gr; g.fillRect(0,0,1080,1080);
+    g.fillStyle='#FBBF24'; g.fillRect(0,0,1080,14); g.fillRect(0,1066,1080,14);
+    const FF="'Noto Sans Bengali','Hind Siliguri',system-ui,sans-serif";
+    const crest=document.querySelector('img.crest'); if(crest&&crest.complete){ try{ g.drawImage(crest,60,52,130,136); }catch(e){} }
+    g.fillStyle='#fff'; g.font=`800 40px ${FF}`; g.fillText(T('ছালাভরা তালতলা স্পোর্টিং ক্লাব','Salavora Taltola Sporting Club'),210,112);
+    g.fillStyle='#A7F3D0'; g.font=`700 28px ${FF}`; g.fillText((m.venue?m.venue+' · ':'')+fd(m.date),210,158);
+    g.fillStyle=done?'#475569':'#DC2626'; g.beginPath(); g.roundRect(800,220,220,62,31); g.fill(); g.fillStyle='#fff'; g.font=`900 32px ${FF}`; g.textAlign='center'; g.fillText(done?T('ম্যাচ শেষ','FINAL'):'● LIVE',910,262);
+    g.textAlign='center'; g.fillStyle='#FBBF24'; g.font=`900 58px ${FF}`; g.fillText(tname(inn.battingTeam),540,400);
+    g.fillStyle='#fff'; g.font=`900 240px ${FF}`; g.fillText(`${num(inn.runs||0)}/${num(inn.wickets||0)}`,540,630);
+    g.font=`700 44px ${FF}`; g.fillStyle='#D1FAE5'; g.fillText(`${T('ওভার','Overs')} ${num(ovs(inn.balls||0,bpo))}${m.overs?' / '+num(m.overs):''}`,540,710);
+    let line='';
+    if(done && m.result && m.result.text) line='🏆 '+m.result.text;
+    else if(i>=1&&m.innings[0]){ const tgt=(m.innings[0].runs||0)+1, left=(m.overs||20)*bpo-(inn.balls||0), rn=tgt-(inn.runs||0); line=rn>0?T(`জিততে ${num(left)} বলে ${num(rn)} রান দরকার`,`Need ${rn} off ${left} balls`):''; }
+    else line=T(`বিপক্ষে ${tname(inn.battingTeam==='A'?'B':'A')}`,`vs ${tname(inn.battingTeam==='A'?'B':'A')}`);
+    if(line){ g.fillStyle='#FBBF24'; g.beginPath(); g.roundRect(90,770,900,100,50); g.fill(); g.fillStyle='#022C22'; g.font=`900 44px ${FF}`; g.fillText(line.length>44?line.slice(0,42)+'…':line,540,836); }
+    g.fillStyle='#fff'; g.font=`800 36px ${FF}`; g.fillText(T('লাইভ দেখুন 👉','Watch live 👉'),540,950); g.fillStyle='#FBBF24'; g.font=`800 34px system-ui,sans-serif`; g.fillText(location.host||'salavora-taltola-sporting-club.github.io',540,1000);
+    const blob=await new Promise(r=>c.toBlob(r,'image/png')); const f=new File([blob],'tsc-live-score.png',{type:'image/png'});
+    try{ if(navigator.canShare&&navigator.canShare({files:[f]})){ await navigator.share({files:[f],text:T('TSC লাইভ স্কোর — ','TSC live score — ')+location.origin+location.pathname+'#live'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='tsc-live-score.png'; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000);
+  }
+  window.__shareImgTest=shareImg;
+  document.getElementById('langBtn').addEventListener('click',()=>setTimeout(()=>{ if(D) update(); },0));
 })();
 </script>
 </body>
