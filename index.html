@@ -492,6 +492,18 @@ details ul{padding-left:20px}
 .ar-sel{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px;font:700 13.5px inherit;font-family:inherit;background:#fff;color:var(--g9)}
 .ar-t td:first-child small{display:block}
 @media(max-width:520px){.ar-bv{grid-template-columns:1fr}}
+.fmw{display:inline-flex;align-items:center;gap:2px;margin-left:6px;vertical-align:middle;color:#94A3B8}.fmw.hot{color:#EA580C}.fmw.cold{color:#0284C7}
+.tossov{position:fixed;inset:0;z-index:98;background:rgba(1,23,15,.75);display:flex;align-items:center;justify-content:center;padding:20px}
+.tossov[hidden]{display:none}
+.tossbox{background:linear-gradient(160deg,#0E8A63,#064E3B);color:#fff;border-radius:26px;padding:26px 22px;max-width:360px;width:100%;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.5);perspective:800px}
+.tcoin{width:130px;height:130px;margin:6px auto 18px;position:relative;transform-style:preserve-3d}
+.tcoin .f{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font:900 30px inherit;backface-visibility:hidden;box-shadow:inset 0 0 0 7px rgba(0,0,0,.12),0 10px 24px rgba(0,0,0,.3)}
+.tcoin .h{background:radial-gradient(circle at 35% 30%,#FFE58A,#F9C80E 55%,#B88900);color:#7A5600}.tcoin .t{background:radial-gradient(circle at 35% 30%,#E5E7EB,#9CA3AF 60%,#4B5563);transform:rotateY(180deg);font-size:50px}
+.tcoin.spin{animation:tspin 2.2s cubic-bezier(.2,.7,.2,1) forwards}.tcoin.spin.tails{animation-name:tspinT}
+@keyframes tspin{0%{transform:translateY(0) rotateY(0)}45%{transform:translateY(-80px) rotateY(1440deg)}100%{transform:translateY(0) rotateY(2880deg)}}
+@keyframes tspinT{0%{transform:translateY(0) rotateY(0)}45%{transform:translateY(-80px) rotateY(1440deg)}100%{transform:translateY(0) rotateY(3060deg)}}
+.tres{min-height:70px;font-weight:800;font-size:17px;line-height:1.5}.tres b{display:block;color:#FBBF24;font-size:24px}
+.tossbox .btn{border:0;cursor:pointer;font-family:inherit;margin-top:6px}
 footer{background:var(--g9);color:#A7F3D0;text-align:center;padding:30px 20px;font-size:14px}
 footer b{color:#fff}
 </style>
@@ -677,6 +689,7 @@ footer b{color:#fff}
   <a href="#club" class="bs-it"><b>🏏</b><span data-en="Club">ক্লাব</span></a>
   <a href="#contact" class="bs-it"><b>✉️</b><span data-en="Contact">যোগাযোগ</span></a>
 </div></div>
+<div class="tossov" id="tossOv" hidden><div class="tossbox"><div class="tcoin" id="tCoin"><div class="f h">TSC</div><div class="f t">🏏</div></div><div class="tres" id="tRes"></div><button class="btn gold" data-toss-x>OK</button></div></div>
 <div class="tv" id="tv" hidden>
   <div class="tv-top"><span class="tv-live" id="tvLive">● LIVE</span><span id="tvTitle"></span><button class="tv-x" data-tv-x aria-label="close">×</button></div>
   <div class="tv-main" id="tvMain"></div>
@@ -805,7 +818,8 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
   const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   let filter='all';
   const pst=n=>{ const S=window.SITE_STATS; if(!S||!S.players) return null; const k=String(n).trim().toLowerCase(); return S.players.find(x=>String(x.n).trim().toLowerCase()===k)||null; };
-  const statLine=p=>{ const s=pst(p.name); if(!s||!s.m) return ''; return `<div class="pst">${L()==='en'?`M ${s.m} · R ${s.r} · W ${s.w}`:`ম্যাচ ${num(s.m)} · রান ${num(s.r)} · উইকেট ${num(s.w)}`}</div>`; };
+  const fmB=s=>{ if(!s||!s.fm||s.fm.length<2) return ''; const mx=Math.max(...s.fm,1),W=40,H=14; const pts=s.fm.map((v,i)=>`${(i*(W/(s.fm.length-1))).toFixed(1)},${(H-2-(v/mx)*(H-4)).toFixed(1)}`).join(' '); return `<span class="fmw ${s.fs||''}" title="${s.fs==='hot'?(L()==='en'?'In great form':'দারুণ ফর্মে'):s.fs==='cold'?(L()==='en'?'Out of form':'ফর্মে নেই'):''}">${s.fs==='hot'?'🔥':s.fs==='cold'?'🧊':''}<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>`; };
+  const statLine=p=>{ const s=pst(p.name); if(!s||!s.m) return ''; return `<div class="pst">${L()==='en'?`M ${s.m} · R ${s.r} · W ${s.w}`:`ম্যাচ ${num(s.m)} · রান ${num(s.r)} · উইকেট ${num(s.w)}`}${fmB(s)}</div>`; };
   window.addEventListener('sitestats',()=>render());
   function render(){
     document.getElementById('teamTabs').innerHTML=TEAMS.map((tm,k)=>`<button class="${k===TEAM_I?'on':''}" data-team="${k}">${tm.short} <small>(${num(tm.players.length)})</small></button>`).join('');
@@ -1299,6 +1313,7 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
       <div class="ar-head"><div class="tm"><span>${esc(m.a)}</span><span>${scoreOf(m,m.a)}</span></div><div class="tm"><span>${esc(m.b)}</span><span>${scoreOf(m,m.b)}</span></div>
       <div class="rs">🏆 ${esc(m.res)}</div>${m.pom?`<div class="mt">⭐ ${T('ম্যাচ সেরা','Player of the match')}: ${esc(m.pom)}</div>`:''}<div class="mt">${fd(m.d)}${m.t?' · '+esc(m.t):''}</div></div>
       ${m.inns.length>1?`<div class="ar-itabs">${m.inns.map((x,i)=>`<button class="${i===innI?'on':''}" data-ar-inn="${i}">${esc(x.bt)}</button>`).join('')}</div>`:''}
+      ${(m.tp||[]).length?`<div class="ar-card"><h4><span>🔄 ${T('টার্নিং পয়েন্ট','Turning points')}</span></h4>${m.tp.map(x=>`<div class="ar-note">🔄 ${esc(L()==='en'?x.en:x.bn)}</div>`).join('')}</div>`:''}
       ${card(m)}</div>`;
   }
   function awards(){
@@ -1511,6 +1526,26 @@ let TEAM_I = 0; const SQUAD_OF=()=>TEAMS[TEAM_I].players;
     if(c) setTimeout(()=>c.click(),400);
   }
   window.addEventListener('hashchange',go); setTimeout(go,900);
+})();
+</script>
+<script>
+(function(){
+  const URL_T='https://tsc-cricket--live-default-rtdb.asia-southeast1.firebasedatabase.app/live/toss.json';
+  const ov=document.getElementById('tossOv'), coin=document.getElementById('tCoin'), res=document.getElementById('tRes');
+  const L=()=>document.documentElement.lang==='en'?'en':'bn', T=(bn,en)=>L()==='en'?en:bn;
+  const esc=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let shown={}; try{ shown=JSON.parse(localStorage.getItem('tscTossSeen')||'{}'); }catch(e){}
+  function show(t,fresh){
+    ov.hidden=false; coin.className='tcoin'; void coin.offsetWidth;
+    const txt=()=>`<b>${t.res==='H'?T('হেড!','Heads!'):T('টেল!','Tails!')}</b>${T(`টস জিতেছে ${esc(t.winner)}`,`${esc(t.winner)} won the toss`)}${t.choice?`<br>${T(`— আগে ${t.choice==='bat'?'ব্যাটিং':'বোলিং'} নিয়েছে`,`— chose to ${t.choice} first`)}`:`<br><small>${T('সিদ্ধান্তের অপেক্ষা…','Decision pending…')}</small>`}`;
+    if(fresh){ res.innerHTML=`<b>🪙</b>${esc(t.a)} vs ${esc(t.b)}`; coin.classList.add('spin'); if(t.res==='T') coin.classList.add('tails'); setTimeout(()=>{ res.innerHTML=txt(); },2300); }
+    else { coin.style.transform=t.res==='T'?'rotateY(180deg)':''; res.innerHTML=txt(); }
+  }
+  async function poll(){ try{ const r=await fetch(URL_T,{cache:'no-store'}); if(!r.ok) return; const t=await r.json(); if(!t||!t.at||!t.res) return;
+      if(Date.now()-t.at>20*60*1000) return; const key=String(t.at); const prev=shown[key];
+      const sig=t.choice||'-'; if(prev===sig) return; show(t, prev===undefined); shown={}; shown[key]=sig; try{ localStorage.setItem('tscTossSeen',JSON.stringify(shown)); }catch(e){} }catch(e){} }
+  ov.addEventListener('click',e=>{ if(e.target===ov||e.target.closest('[data-toss-x]')) ov.hidden=true; });
+  poll(); setInterval(()=>{ if(!document.hidden) poll(); },15000);
 })();
 </script>
 </body>
